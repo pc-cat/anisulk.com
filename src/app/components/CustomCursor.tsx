@@ -6,22 +6,27 @@ export default function CustomCursor() {
     const cursorOuterRef = useRef<HTMLDivElement>(null);
     const cursorInnerRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        // Detect touch devices
+        if (window.matchMedia("(pointer: coarse)").matches) {
+            setIsMobile(true);
+            return;
+        }
+
         let animationFrameId: number;
         let clientX = -100;
         let clientY = -100;
 
         const render = () => {
             if (cursorOuterRef.current) {
-                // Base offset to center the 24x24 cursor
                 const baseOffset = 12;
                 cursorOuterRef.current.style.transform = `translate3d(${clientX - baseOffset}px, ${clientY - baseOffset}px, 0)`;
             }
             animationFrameId = requestAnimationFrame(render);
         };
 
-        // Start animation loop
         animationFrameId = requestAnimationFrame(render);
 
         const updatePosition = (e: MouseEvent) => {
@@ -44,11 +49,25 @@ export default function CustomCursor() {
             }
         };
 
+        const handleMouseDown = () => {
+            if (cursorInnerRef.current) {
+                cursorInnerRef.current.style.backgroundColor = "rgba(220, 220, 220, 0.8)";
+            }
+        };
+
+        const handleMouseUp = () => {
+            if (cursorInnerRef.current) {
+                cursorInnerRef.current.style.backgroundColor = "rgba(150, 150, 150, 0.4)";
+            }
+        };
+
         const handleMouseLeave = () => setIsVisible(false);
         const handleMouseEnter = () => setIsVisible(true);
 
         window.addEventListener("mousemove", updatePosition, { passive: true });
         window.addEventListener("mouseover", handleMouseOver, { passive: true });
+        window.addEventListener("mousedown", handleMouseDown, { passive: true });
+        window.addEventListener("mouseup", handleMouseUp, { passive: true });
         document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
         document.addEventListener("mouseenter", handleMouseEnter, { passive: true });
 
@@ -56,12 +75,14 @@ export default function CustomCursor() {
             cancelAnimationFrame(animationFrameId);
             window.removeEventListener("mousemove", updatePosition);
             window.removeEventListener("mouseover", handleMouseOver);
+            window.removeEventListener("mousedown", handleMouseDown);
+            window.removeEventListener("mouseup", handleMouseUp);
             document.removeEventListener("mouseleave", handleMouseLeave);
             document.removeEventListener("mouseenter", handleMouseEnter);
         };
     }, [isVisible]);
 
-    if (typeof window === "undefined") return null;
+    if (typeof window === "undefined" || isMobile) return null;
 
     return (
         <div
@@ -82,7 +103,7 @@ export default function CustomCursor() {
                     backgroundColor: "rgba(150, 150, 150, 0.4)",
                     WebkitBackdropFilter: "blur(4px)",
                     backdropFilter: "blur(4px)",
-                    transition: "transform 0.15s ease-out",
+                    transition: "transform 0.15s ease-out, background-color 0.15s ease-out",
                     willChange: "transform",
                     transform: "scale(1)",
                 }}
