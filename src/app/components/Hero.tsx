@@ -47,9 +47,64 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
       >
-        <motion.h1 variants={itemVariants} className="text-[clamp(4rem,10vw,8rem)] leading-[0.85] font-black tracking-tighter mb-8">
-          i'm f**king around<br />& finding out
-        </motion.h1>
+        {/* Creative split-word typographic hero */}
+        <div className="mb-8">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
+            className="leading-[0.85] font-black tracking-tighter"
+            style={{ fontSize: 'clamp(3.5rem, 9vw, 7.5rem)' }}
+          >
+            {/* Line 1 */}
+            <div className="flex flex-wrap gap-x-4 mb-1">
+              <motion.span
+                variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                className="font-light italic text-zinc-400"
+              >
+                i&apos;m
+              </motion.span>
+              <motion.span
+                variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-300 to-white italic skew-x-[-4deg] inline-block px-1 pb-1"
+              >
+                f**kin
+              </motion.span>
+            </div>
+
+            {/* Line 2 */}
+            <div className="flex flex-wrap gap-x-4 mb-1">
+              <motion.span
+                variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                className="text-white"
+              >
+                around
+              </motion.span>
+            </div>
+
+            {/* Line 3 */}
+            <div className="flex flex-wrap gap-x-4">
+              <motion.span
+                variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                className="font-light italic text-zinc-500"
+              >
+                &amp;
+              </motion.span>
+              <motion.span
+                variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                style={{ WebkitTextStroke: '1.5px white', color: 'transparent' }}
+              >
+                finding
+              </motion.span>
+              <motion.span
+                variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
+                style={{ WebkitTextStroke: '1.5px white', color: 'transparent' }}
+              >
+                out
+              </motion.span>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Social Links */}
         <motion.div variants={itemVariants} className="flex gap-4 mb-16">
