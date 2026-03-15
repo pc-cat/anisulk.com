@@ -22,16 +22,16 @@ export default function Hero() {
   return (
     <section className="min-h-screen pt-32 px-8 flex flex-col md:flex-row gap-8 relative overflow-hidden">
       {/* Left Content */}
-      <motion.div 
+      <motion.div
         className="flex-1 flex flex-col justify-center max-w-2xl z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <motion.h1 variants={itemVariants} className="text-[clamp(4rem,10vw,8rem)] leading-[0.85] font-black tracking-tighter mb-8">
-          visual<br />poetry
+          f**king around<br />& finding out
         </motion.h1>
-        
+
         <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between mb-16 max-w-md gap-8">
           <p className="text-zinc-400 text-sm max-w-[240px]">
             Welcome to a visual journey that transcends time and space. Discover the artistry of moments captured in motion.
@@ -65,7 +65,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Right Content / Image Area */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -75,7 +75,7 @@ export default function Hero() {
         <div className="absolute top-8 left-8 text-purple-300 font-signature text-6xl opacity-60 italic">
           Photography
         </div>
-        
+
         {/* Mock image content */}
         <div className="w-64 h-64 rounded-full bg-purple-600/20 blur-3xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
         <div className="text-purple-200/40 text-sm tracking-widest uppercase relative z-10 text-center">
@@ -89,7 +89,7 @@ export default function Hero() {
             📸
           </div>
           <div className="w-12 h-12 bg-zinc-800 rounded-full overflow-hidden border-2 border-transparent hover:border-purple-400 cursor-pointer transition-colors shadow-lg flex items-center justify-center text-xl">
-             👤
+            👤
           </div>
           <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white cursor-pointer shadow-lg hover:bg-zinc-900 transition-colors">
             <ArrowUpRight size={20} />
