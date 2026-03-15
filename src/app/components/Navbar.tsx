@@ -25,9 +25,9 @@ export default function Navbar() {
         <nav className={`w-full flex items-center justify-between px-6 py-4 rounded-full border border-white/10 shadow-2xl transition-all duration-300 ${scrolled ? 'bg-zinc-900/80 backdrop-blur-xl' : 'bg-zinc-900/60 backdrop-blur-md'}`}>
           {/* Logo */}
           <div className="font-bold text-2xl tracking-tighter mix-blend-difference z-50">
-            on<span className="text-purple-500">.</span>
+            anisul<span className="text-purple-500">.</span>
           </div>
-          
+
           {/* Desktop Links */}
           <div className="hidden md:flex gap-8 text-sm uppercase tracking-widest text-zinc-400">
             <Link href="/" className="text-white hover:text-purple-400 transition-colors">Home</Link>
@@ -43,13 +43,13 @@ export default function Navbar() {
               <span className="text-sm font-medium tracking-wide">Buy ticket, 19 Nov 22</span>
               <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center hover:bg-purple-500 transition-colors cursor-pointer text-white">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                  <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </div>
             </div>
-            
+
             {/* Mobile Menu Button - ALWAYS VISIBLE ON MOBILE */}
-            <button 
+            <button
               className="md:hidden relative z-[110] w-10 h-10 rounded-full flex items-center justify-center text-white bg-white/10 backdrop-blur hover:bg-white/20 transition-all border border-white/10"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
@@ -86,7 +86,7 @@ export default function Navbar() {
                 <Link href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-purple-300 transition-colors">Contact</Link>
               </motion.div>
             </div>
-            
+
             {/* Background design element on mobile */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_100%)] pointer-events-none"></div>
           </motion.div>
