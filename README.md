@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anisul | Visual Poetry
 
-## Getting Started
+A premium, production-grade web portfolio for a videographer/photographer, built with modern web technologies to emphasize deep aesthetics, smooth interactions, and performant delivery.
 
-First, run the development server:
+## ✨ Features
+
+- **Next.js 15+ (App Router):** Leveraging server components and fast routing.
+- **Tailwind CSS v4:** Modern utility-first styling for complex, responsive, grid-based layouts.
+- **Framer Motion:** High-end stagger animations and scroll reveals for dynamic user feedback.
+- **Glassmorphism & Theming:** Custom color palettes (pure black, white, and vibrant deep purple accents).
+- **Responsive Architecture:** Graceful scaling between mobile, tablet, and ultra-wide monitor displays.
+- **Quality of Life Navigation:** Floating pill navigation, animated mobile hamburger menu, global native smooth scrolling, and custom selection highlights.
+- **Inter Typography:** Leveraging variable font configurations for a highly editorial feel.
+
+## 🚀 Getting Started
+
+First, ensure you have the dependencies installed:
+
+```bash
+npm install
+```
+
+Then, run the development server with Hot Module Replacement (HMR):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) (or whichever port is assigned) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`src/app/page.tsx` is the primary entrypoint assembling the various sections.
+All sub-sections reside in `src/app/components/`:
+- **Navbar:** Floating glass pill / Animated interactive mobile menu
+- **Hero:** Animated staggering initial entry
+- **About:** Engaging typography-driven biography
+- **Portfolio:** CSS Grid image gallery
+- **Exhibitions / Marquee:** Auto-scrolling infinite text displays
+- **Footer:** Immersive final section featuring an interactive back-to-top interaction
 
-## Learn More
+## 🖼️ Working with Images
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Image integration is natively supported through Next.js `<Image/>` tags.
+To swap in your own artwork:
+1. Place standard `.jpg`, `.png`, or `.webp` files in `public/images/`.
+2. Locate the corresponding `<Image>` tag in a `src/app/components/` file.
+3. Update the `src="/images/filename.extension"` property to match your image.

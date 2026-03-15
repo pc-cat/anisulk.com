@@ -1,8 +1,22 @@
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Marquee from './components/Marquee';
+import About from './components/About';
+import Portfolio from './components/Portfolio';
+import Exhibitions from './components/Exhibitions';
+import Footer from './components/Footer';
+
 export default function Home() {
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-4xl font-bold">Anisul</h1>
-      <p className="mt-4 text-lg">Welcome to Anisulk.com</p>
+    <main className="min-h-screen bg-black text-white relative flex flex-col selection:bg-purple-900 selection:text-white pb-32">
+      <Navbar />
+      <Hero />
+      <Marquee text="about . about . about ." />
+      <About />
+      <Portfolio />
+      <Marquee text="exhibitions . exhibitions ." />
+      <Exhibitions />
+      <Footer />
     </main>
   );
 }
