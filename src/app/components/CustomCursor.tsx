@@ -7,10 +7,13 @@ export default function CustomCursor() {
     const cursorInnerRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        // Detect touch devices
-        if (window.matchMedia("(pointer: coarse)").matches) {
+        setIsMounted(true);
+
+        // Detect touch devices to avoid binding expensive listeners
+        if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) {
             setIsMobile(true);
             return;
         }
@@ -27,6 +30,7 @@ export default function CustomCursor() {
             animationFrameId = requestAnimationFrame(render);
         };
 
+        // Kick off the tracking rendering loop
         animationFrameId = requestAnimationFrame(render);
 
         const updatePosition = (e: MouseEvent) => {
@@ -36,16 +40,22 @@ export default function CustomCursor() {
         };
 
         const handleMouseOver = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            const isClickable =
-                target.tagName.toLowerCase() === "button" ||
-                target.tagName.toLowerCase() === "a" ||
-                target.closest("button") ||
-                target.closest("a") ||
-                window.getComputedStyle(target).cursor === "pointer";
+            try {
+                const target = e.target as HTMLElement;
+                if (!target || !target.tagName) return;
 
-            if (cursorInnerRef.current) {
-                cursorInnerRef.current.style.transform = isClickable ? "scale(2)" : "scale(1)";
+                const isClickable =
+                    target.tagName.toLowerCase() === "button" ||
+                    target.tagName.toLowerCase() === "a" ||
+                    target.closest("button") ||
+                    target.closest("a") ||
+                    window.getComputedStyle(target).cursor === "pointer";
+
+                if (cursorInnerRef.current) {
+                    cursorInnerRef.current.style.transform = isClickable ? "scale(2)" : "scale(1)";
+                }
+            } catch (error) {
+                // Defensively catch style calculation errors if target is detached
             }
         };
 
@@ -82,7 +92,8 @@ export default function CustomCursor() {
         };
     }, [isVisible]);
 
-    if (typeof window === "undefined" || isMobile) return null;
+    // Prevents hydration mismatches between Server HTML and initial Client HTML
+    if (!isMounted || isMobile) return null;
 
     return (
         <div
