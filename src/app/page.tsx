@@ -3,7 +3,7 @@ import Hero from './components/Hero';
 import Marquee from './components/Marquee';
 import About from './components/About';
 import Portfolio from './components/Portfolio';
-import Exhibitions from './components/Exhibitions';
+import Projects from './components/Projects';
 import Footer from './components/Footer';
 
 export default function Home() {
@@ -14,8 +14,8 @@ export default function Home() {
       <Marquee text="about . about . about ." />
       <About />
       <Portfolio />
-      <Marquee text="exhibitions . exhibitions ." />
-      <Exhibitions />
+      <Marquee text="projects . projects ." />
+      <Projects />
       <Footer />
     </main>
   );

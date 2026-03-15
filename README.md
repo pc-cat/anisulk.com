@@ -36,7 +36,7 @@ All sub-sections reside in `src/app/components/`:
 - **Hero:** Animated staggering initial entry
 - **About:** Engaging typography-driven biography
 - **Portfolio:** CSS Grid image gallery
-- **Exhibitions / Marquee:** Auto-scrolling infinite text displays
+- **Projects / Marquee:** Auto-scrolling infinite text displays
 - **Footer:** Immersive final section featuring an interactive back-to-top interaction
 
 ## 🖼️ Working with Images

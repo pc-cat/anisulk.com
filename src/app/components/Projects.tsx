@@ -1,4 +1,4 @@
-export default function Exhibitions() {
+export default function Projects() {
   const events = [
     { num: "01", title: "Cinematic Visions\nUnveiled", location: "Madrid Gallery, Spain, 21 Nov 2023" },
     { num: "02", title: "Frames in\nMotion", location: "Manchester Museum, UK, 20 Nov 2023" },
@@ -7,7 +7,7 @@ export default function Exhibitions() {
   ];
 
   return (
-    <section id="exhibitions" className="py-16 px-8 max-w-7xl mx-auto">
+    <section id="projects" className="py-16 px-8 max-w-7xl mx-auto">
       <div className="flex flex-col gap-12">
         {events.map((event, index) => (
           <div key={index} className="flex flex-col md:flex-row items-baseline md:items-center justify-between group border-b border-zinc-900 pb-12 cursor-pointer hover:border-purple-500/50 transition-colors">
