@@ -16,7 +16,6 @@ export default function Footer() {
         </div>
 
         <div className="flex gap-8 text-xs uppercase tracking-widest text-zinc-400">
-          <Link href="/" className="hover:text-purple-400 transition-colors">Home</Link>
           <Link href="#about" className="hover:text-purple-400 transition-colors">About</Link>
           <Link href="#portfolio" className="hover:text-purple-400 transition-colors">Portfolio</Link>
           <Link href="#projects" className="hover:text-purple-400 transition-colors">Projects</Link>
@@ -30,7 +29,7 @@ export default function Footer() {
         className="w-full relative h-[30vh] md:h-[40vh] flex items-end justify-center overflow-hidden cursor-pointer group"
       >
         <h2 className="text-[clamp(6rem,20vw,24rem)] font-black tracking-tighter leading-none m-0 p-0 text-center w-full group-hover:text-purple-400 transition-colors duration-700">
-          vidéaste
+          contacts
         </h2>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 backdrop-blur-sm text-sm uppercase tracking-widest px-6 py-2 rounded-full border border-purple-500">
           Back to Top ↑
