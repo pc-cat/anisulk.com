@@ -1,15 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
-    const [position, setPosition] = useState({ x: -100, y: -100 });
-    const [isHovering, setIsHovering] = useState(false);
+    const cursorOuterRef = useRef<HTMLDivElement>(null);
+    const cursorInnerRef = useRef<HTMLDivElement>(null);
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
+        let animationFrameId: number;
+        let clientX = -100;
+        let clientY = -100;
+
+        const render = () => {
+            if (cursorOuterRef.current) {
+                // Base offset to center the 24x24 cursor
+                const baseOffset = 12;
+                cursorOuterRef.current.style.transform = `translate3d(${clientX - baseOffset}px, ${clientY - baseOffset}px, 0)`;
+            }
+            animationFrameId = requestAnimationFrame(render);
+        };
+
+        // Start animation loop
+        animationFrameId = requestAnimationFrame(render);
+
         const updatePosition = (e: MouseEvent) => {
-            setPosition({ x: e.clientX, y: e.clientY });
+            clientX = e.clientX;
+            clientY = e.clientY;
             if (!isVisible) setIsVisible(true);
         };
 
@@ -22,23 +39,21 @@ export default function CustomCursor() {
                 target.closest("a") ||
                 window.getComputedStyle(target).cursor === "pointer";
 
-            setIsHovering(!!isClickable);
+            if (cursorInnerRef.current) {
+                cursorInnerRef.current.style.transform = isClickable ? "scale(2)" : "scale(1)";
+            }
         };
 
-        const handleMouseLeave = () => {
-            setIsVisible(false);
-        };
+        const handleMouseLeave = () => setIsVisible(false);
+        const handleMouseEnter = () => setIsVisible(true);
 
-        const handleMouseEnter = () => {
-            setIsVisible(true);
-        };
-
-        window.addEventListener("mousemove", updatePosition);
-        window.addEventListener("mouseover", handleMouseOver);
-        document.addEventListener("mouseleave", handleMouseLeave);
-        document.addEventListener("mouseenter", handleMouseEnter);
+        window.addEventListener("mousemove", updatePosition, { passive: true });
+        window.addEventListener("mouseover", handleMouseOver, { passive: true });
+        document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+        document.addEventListener("mouseenter", handleMouseEnter, { passive: true });
 
         return () => {
+            cancelAnimationFrame(animationFrameId);
             window.removeEventListener("mousemove", updatePosition);
             window.removeEventListener("mouseover", handleMouseOver);
             document.removeEventListener("mouseleave", handleMouseLeave);
@@ -50,16 +65,28 @@ export default function CustomCursor() {
 
     return (
         <div
-            className={`fixed top-0 left-0 pointer-events-none z-[9999] rounded-full transition-all duration-100 ease-out flex items-center justify-center`}
+            ref={cursorOuterRef}
+            className="fixed top-0 left-0 pointer-events-none z-[9999]"
             style={{
-                width: isHovering ? "48px" : "24px",
-                height: isHovering ? "48px" : "24px",
-                backgroundColor: "rgba(150, 150, 150, 0.4)",
-                backdropFilter: "blur(4px)",
-                transform: `translate(${position.x - (isHovering ? 24 : 12)}px, ${position.y - (isHovering ? 24 : 12)
-                    }px)`,
+                width: "24px",
+                height: "24px",
                 opacity: isVisible ? 1 : 0,
+                transition: "opacity 0.3s ease-out",
+                willChange: "transform",
             }}
-        />
+        >
+            <div
+                ref={cursorInnerRef}
+                className="w-full h-full rounded-full"
+                style={{
+                    backgroundColor: "rgba(150, 150, 150, 0.4)",
+                    WebkitBackdropFilter: "blur(4px)",
+                    backdropFilter: "blur(4px)",
+                    transition: "transform 0.15s ease-out",
+                    willChange: "transform",
+                    transform: "scale(1)",
+                }}
+            />
+        </div>
     );
 }
