@@ -39,7 +39,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="min-h-screen pt-32 px-8 flex flex-col md:flex-row gap-8 relative overflow-hidden">
+    <section className="min-h-screen pt-32 px-8 flex flex-col md:flex-row gap-8 relative">
       {/* Left Content */}
       <motion.div
         className="flex-1 flex flex-col justify-center max-w-2xl z-10"
@@ -66,9 +66,9 @@ export default function Hero() {
               </motion.span>
               <motion.span
                 variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
-                className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-300 to-white italic skew-x-[-4deg] inline-block px-1 pb-1"
+                className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-300 to-white italic inline-block pr-3 pb-1"
               >
-                f**kin
+                f**king
               </motion.span>
             </div>
 
