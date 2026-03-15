@@ -1,5 +1,24 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Instagram, Linkedin } from 'lucide-react';
 import * as motion from 'framer-motion/client';
+
+const xIcon = (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
+
+const snapchatIcon = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.22 1.48c-3.1 0-5.46 2.05-5.46 4.7 0 1-.06 2.2-.18 3.06-.11.77-.38 1.43-.88 1.94-.52.54-1.21.98-1.57 1.2-.66.4-1.6.93-1.6 1.5 0 .8.89 1.44 2.11 1.57.17.02.4.02.5.23.08.17 0 .42-.1.65-.18.42-.56 1.33 1.07 1.33.8 0 1.8-.75 2.11-.98.24-.18.57-.42.94-.42s.7.24.93.4c.55.43 1.94 1.47 3.51 1.47 1.58 0 2.97-1.05 3.5-1.46.25-.19.57-.43.94-.43.36 0 .69.24.93.41.33.24 1.35 1.02 2.15 1.02 1.56 0 1.25-.92 1.08-1.32-.1-.23-.17-.49-.09-.66.11-.22.35-.22.52-.24 1.21-.13 2.1-.77 2.1-1.56 0-.58-.93-1.12-1.58-1.5-.37-.22-1.05-.66-1.57-1.2-.5-.51-.77-1.17-.88-1.94-.12-.87-.19-2.07-.19-3.07 0-2.65-2.37-4.7-5.48-4.7z" />
+  </svg>
+);
+
+const socials = [
+  { name: 'Instagram', icon: <Instagram size={18} />, href: 'https://instagram.com/pc_cat' },
+  { name: 'LinkedIn', icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/kazimoyeen/' },
+  { name: 'X', icon: xIcon, href: 'https://x.com/MoyeenAnisul' },
+  { name: 'Snapchat', icon: snapchatIcon, href: 'https://snapchat.com/@fahoem' }
+];
 
 export default function Hero() {
   const containerVariants: any = {
@@ -32,35 +51,15 @@ export default function Hero() {
           f**king around<br />& finding out
         </motion.h1>
 
-        <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between mb-16 max-w-md gap-8">
-          <p className="text-zinc-400 text-sm max-w-[240px]">
-            Welcome to a visual journey that transcends time and space. Discover the artistry of moments captured in motion.
-          </p>
-        </motion.div>
-
         {/* Social Links */}
         <motion.div variants={itemVariants} className="flex gap-4 mb-16">
-          {['yt', 'fb', 'ig', 'tw'].map((social) => (
-            <div key={social} className="w-10 h-10 rounded-full border border-zinc-800 flex items-center justify-center text-xs uppercase tracking-wider hover:border-purple-500 hover:text-purple-400 transition-colors cursor-pointer">
-              {social}
-            </div>
+          {socials.map((social) => (
+            <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="w-10 h-10 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-400 hover:border-purple-500 hover:text-purple-400 transition-colors cursor-pointer group">
+              <div className="group-hover:scale-110 transition-transform duration-300">
+                {social.icon}
+              </div>
+            </a>
           ))}
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div variants={itemVariants} className="flex gap-12 text-sm">
-          <div>
-            <div className="text-5xl font-bold tracking-tighter mb-2 italic">+250k</div>
-            <div className="text-zinc-400 max-w-[150px] leading-snug">
-              Views from crossing media platforms in live impression
-            </div>
-          </div>
-          <div>
-            <div className="text-5xl font-bold tracking-tighter mb-2 italic">+800k</div>
-            <div className="text-zinc-400 max-w-[150px] leading-snug">
-              Views outside text, revealing everything that surpasses masses
-            </div>
-          </div>
         </motion.div>
       </motion.div>
 

@@ -12,9 +12,9 @@ export default function Footer() {
       {/* Footer Top */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-16">
         <div className="font-bold text-2xl tracking-tighter mb-8 md:mb-0">
-          on<span className="text-purple-500">.</span>
+          anisul<span className="text-purple-500">.</span>
         </div>
-        
+
         <div className="flex gap-8 text-xs uppercase tracking-widest text-zinc-400">
           <Link href="/" className="hover:text-purple-400 transition-colors">Home</Link>
           <Link href="#about" className="hover:text-purple-400 transition-colors">About</Link>
@@ -25,7 +25,7 @@ export default function Footer() {
       </div>
 
       {/* Massive Text (Vidéaste) - Now Clickable Back to Top */}
-      <div 
+      <div
         onClick={scrollToTop}
         className="w-full relative h-[30vh] md:h-[40vh] flex items-end justify-center overflow-hidden cursor-pointer group"
       >
