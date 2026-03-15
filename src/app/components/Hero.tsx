@@ -48,7 +48,7 @@ export default function Hero() {
         animate="visible"
       >
         <motion.h1 variants={itemVariants} className="text-[clamp(4rem,10vw,8rem)] leading-[0.85] font-black tracking-tighter mb-8">
-          f**king around<br />& finding out
+          i'm f**king around<br />& finding out
         </motion.h1>
 
         {/* Social Links */}
