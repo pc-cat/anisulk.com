@@ -9,19 +9,6 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="pt-24 pb-8 px-8 overflow-hidden relative">
-      {/* Footer Top */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-16">
-        <div className="font-bold text-2xl tracking-tighter mb-8 md:mb-0">
-          anisul<span className="text-purple-500">.</span>
-        </div>
-
-        <div className="flex gap-8 text-xs uppercase tracking-widest text-zinc-400">
-          <Link href="#about" className="hover:text-purple-400 transition-colors">About</Link>
-          <Link href="#portfolio" className="hover:text-purple-400 transition-colors">Portfolio</Link>
-          <Link href="#projects" className="hover:text-purple-400 transition-colors">Projects</Link>
-          <Link href="#contact" className="hover:text-purple-400 transition-colors text-white font-bold">Contact</Link>
-        </div>
-      </div>
 
       {/* Massive Text (Vidéaste) - Now Clickable Back to Top */}
       <div
