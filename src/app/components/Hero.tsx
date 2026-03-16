@@ -53,11 +53,11 @@ export default function Hero() {
             initial="hidden"
             animate="visible"
             variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
-            className="leading-[0.85] font-black tracking-tighter"
-            style={{ fontSize: 'clamp(3.5rem, 9vw, 7.5rem)' }}
+            className="font-black tracking-tighter"
+            style={{ fontSize: 'clamp(3.5rem, 9vw, 7.5rem)', lineHeight: 0.9 }}
           >
-            {/* Line 1 */}
-            <div className="flex flex-wrap gap-x-4 mb-1">
+            {/* Line 1 — extra pb for italic descenders */}
+            <div className="flex flex-wrap gap-x-4 pb-4">
               <motion.span
                 variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
                 className="font-light italic text-zinc-400"
@@ -66,9 +66,9 @@ export default function Hero() {
               </motion.span>
               <motion.span
                 variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
-                className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-300 to-white italic inline-block pr-3 pb-1"
+                className="text-transparent bg-clip-text bg-gradient-to-r from-white via-fuchsia-300 to-purple-500 italic inline-block pr-8 pb-1"
               >
-                f**king
+                f**kin'
               </motion.span>
             </div>
 
