@@ -107,15 +107,18 @@ export default function Hero() {
         </div>
 
         {/* Social Links */}
-        <motion.div variants={itemVariants} className="flex gap-4 mb-16">
-          {socials.map((social) => (
-            <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="w-10 h-10 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-400 hover:border-purple-500 hover:text-purple-400 transition-colors cursor-pointer group">
-              <div className="group-hover:scale-110 transition-transform duration-300">
-                {social.icon}
-              </div>
-            </a>
-          ))}
-        </motion.div>
+        <div>
+          <p className="text-xs uppercase tracking-widest text-zinc-500 mb-3">My socials: </p>
+          <motion.div variants={itemVariants} className="flex gap-4 mb-16">
+            {socials.map((social) => (
+              <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="w-10 h-10 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-400 hover:border-purple-500 hover:text-purple-400 transition-colors cursor-pointer group">
+                <div className="group-hover:scale-110 transition-transform duration-300">
+                  {social.icon}
+                </div>
+              </a>
+            ))}
+          </motion.div>
+        </div>
       </motion.div>
 
       {/* Right Content / Image Area */}
