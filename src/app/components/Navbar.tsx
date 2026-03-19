@@ -37,7 +37,7 @@ export default function Navbar() {
 
           {/* Right Actions / Mobile Toggle */}
           <div className="flex items-center gap-4 z-50">
-            <a href="#contact" className="hidden sm:flex items-center gap-3 cursor-pointer group">
+            <a href="#contact" className="hidden sm:flex items-center gap-3 cursor-pointer group" aria-label="Contact me">
               <span className="text-sm font-medium tracking-wide group-hover:text-purple-300 transition-colors">Contact me</span>
               <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center group-hover:bg-purple-500 transition-colors text-white">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -50,6 +50,9 @@ export default function Navbar() {
             <button
               className="md:hidden relative z-[110] w-10 h-10 rounded-full flex items-center justify-center text-white bg-white/10 backdrop-blur hover:bg-white/20 transition-all border border-white/10"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle mobile menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -61,6 +64,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, y: '-100%' }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: '-100%' }}

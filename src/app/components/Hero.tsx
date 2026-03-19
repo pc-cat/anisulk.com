@@ -1,5 +1,14 @@
-import { ArrowUpRight, Instagram, Linkedin } from 'lucide-react';
+'use client';
+
+import { Suspense, useRef, useState, useEffect } from 'react';
+import { Instagram, Linkedin } from 'lucide-react';
 import * as motion from 'framer-motion/client';
+import { Variants } from 'framer-motion';
+import { Canvas } from '@react-three/fiber';
+import { Environment, ContactShadows } from '@react-three/drei';
+import * as THREE from 'three';
+import { useMediaQuery } from 'react-responsive';
+import { BatmanModel } from './batman';
 
 const xIcon = (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -13,6 +22,15 @@ const snapchatIcon = (
   </svg>
 );
 
+function ModelFallback() {
+  return (
+    <mesh>
+      <sphereGeometry args={[0.15, 16, 16]} />
+      <meshStandardMaterial color="#7c3aed" wireframe />
+    </mesh>
+  );
+}
+
 const socials = [
   { name: 'Instagram', icon: <Instagram size={18} />, href: 'https://instagram.com/pc_cat' },
   { name: 'LinkedIn', icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/kazimoyeen/' },
@@ -21,33 +39,118 @@ const socials = [
 ];
 
 export default function Hero() {
-  const containerVariants: any = {
+  const isDesktop = useMediaQuery({ minWidth: 1024 });
+  const isTablet = useMediaQuery({ minWidth: 640, maxWidth: 1023 });
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const modelScale = isDesktop ? 0.02 : isTablet ? 0.011 : 0.009;
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const mouseXRef = useRef(0);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
+    if (!sectionRef.current) return;
+    const { left, width } = sectionRef.current.getBoundingClientRect();
+    mouseXRef.current = ((e.clientX - left) / width) * 2 - 1;
+  }
+
+  function handleMouseLeave() {
+    mouseXRef.current = 0;
+  }
+
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-    }
+    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
   };
 
   const itemVariants: any = {
     hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-    }
+    visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
   };
 
   return (
-    <section className="min-h-screen pt-32 px-8 flex flex-col md:flex-row gap-8 relative">
-      {/* Left Content */}
+    <section
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="min-h-screen pt-32 px-8 flex items-center relative"
+    >
+      {/* ── Subtle purple atmospheric glow ──────────────────── */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: 'radial-gradient(ellipse at 72% 65%, rgba(139,92,246,0.1) 0%, transparent 45%)',
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: 'radial-gradient(circle at 68% 80%, rgba(124,58,237,0.08) 0%, transparent 30%)',
+        }}
+      />
+
+      {/* ── Full-section 3D Canvas (Hidden on Mobile) ──────────── */}
+      {mounted && !isMobile && (
+        <Canvas
+          dpr={[1, 1.5]} // Optimize pixel ratio for performance
+          camera={{ position: [2, 0, 5], fov: 60 }}
+          shadows
+          gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 1 }}
+        >
+          <ambientLight intensity={0.4} />
+          <directionalLight
+            position={[3, 5, 3]}
+            intensity={1.5}
+            castShadow
+            shadow-mapSize={[1024, 1024]}
+            color="#c4b5fd"
+          />
+          <pointLight position={[-3, 2, -2]} intensity={0.8} color="#7c3aed" />
+          <Suspense fallback={<ModelFallback />}>
+            <group position={[2, 0, 0]}>
+              <BatmanModel scale={modelScale} mouseX={mouseXRef} />
+
+              {/* Guaranteed smooth purple floor glow */}
+              <mesh position={[0, -1.85, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <planeGeometry args={[12, 12]} />
+                <meshBasicMaterial
+                  transparent
+                  depthWrite={false}
+                  opacity={0.8}
+                  blending={THREE.AdditiveBlending}
+                  map={new THREE.CanvasTexture(
+                    (() => {
+                      const canvas = document.createElement('canvas');
+                      canvas.width = 256;
+                      canvas.height = 256;
+                      const ctx = canvas.getContext('2d')!;
+                      const grad = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+                      grad.addColorStop(0, 'rgba(147, 51, 234, 1)'); // Sharp purple center
+                      grad.addColorStop(0.3, 'rgba(124, 58, 237, 0.4)'); // Smooth fade
+                      grad.addColorStop(1, 'rgba(124, 58, 237, 0)');
+                      ctx.fillStyle = grad;
+                      ctx.fillRect(0, 0, 256, 256);
+                      return canvas;
+                    })()
+                  )}
+                />
+              </mesh>
+            </group>
+            <Environment preset="night" />
+          </Suspense>
+        </Canvas>
+      )}
+
+      {/* ── Hero text ──────────────────────────────────────────── */}
       <motion.div
         className="flex-1 flex flex-col justify-center max-w-2xl z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        {/* Creative split-word typographic hero */}
         <div className="mb-8">
           <motion.div
             initial="hidden"
@@ -56,7 +159,6 @@ export default function Hero() {
             className="font-black tracking-tighter"
             style={{ fontSize: 'clamp(3.5rem, 9vw, 7.5rem)', lineHeight: 0.9 }}
           >
-            {/* Line 1 — extra pb for italic descenders */}
             <div className="flex flex-wrap gap-x-4 pb-4">
               <motion.span
                 variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
@@ -68,11 +170,10 @@ export default function Hero() {
                 variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
                 className="text-transparent bg-clip-text bg-gradient-to-r from-white via-fuchsia-300 to-purple-500 italic inline-block pr-8 pb-1"
               >
-                f**kin'
+                f**kin&apos;
               </motion.span>
             </div>
 
-            {/* Line 2 */}
             <div className="flex flex-wrap gap-x-4 mb-1">
               <motion.span
                 variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
@@ -82,7 +183,6 @@ export default function Hero() {
               </motion.span>
             </div>
 
-            {/* Line 3 */}
             <div className="flex flex-wrap gap-x-4">
               <motion.span
                 variants={{ hidden: { y: 80, opacity: 0 }, visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } }}
@@ -108,49 +208,23 @@ export default function Hero() {
 
         {/* Social Links */}
         <div>
-          <p className="text-xs uppercase tracking-widest text-zinc-500 mb-3">My socials: </p>
+          <p className="text-xs uppercase tracking-widest text-zinc-500 mb-3">My socials:</p>
           <motion.div variants={itemVariants} className="flex gap-4 mb-16">
             {socials.map((social) => (
-              <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name} className="w-10 h-10 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-400 hover:border-purple-500 hover:text-purple-400 transition-colors cursor-pointer group">
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.name}
+                className="w-10 h-10 rounded-full border border-zinc-800 flex items-center justify-center text-zinc-400 hover:border-purple-500 hover:text-purple-400 transition-colors cursor-pointer group"
+              >
                 <div className="group-hover:scale-110 transition-transform duration-300">
                   {social.icon}
                 </div>
               </a>
             ))}
           </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Right Content / Image Area */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="flex-1 relative min-h-[500px] mt-12 md:mt-0 rounded-3xl overflow-hidden bg-purple-900 flex items-center justify-center border border-purple-800/50"
-      >
-        {/* Placeholder for the large image and signature overlay */}
-        <div className="absolute top-8 left-8 text-purple-300 font-signature text-6xl opacity-60 italic">
-          Photography
-        </div>
-
-        {/* Mock image content */}
-        <div className="w-64 h-64 rounded-full bg-purple-600/20 blur-3xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="text-purple-200/40 text-sm tracking-widest uppercase relative z-10 text-center">
-          <div className="mb-4">Portrait / Motion</div>
-          <div>Image Placeholder</div>
-        </div>
-
-        {/* Floating action buttons */}
-        <div className="absolute left-8 bottom-32 flex flex-col gap-4 z-20">
-          <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white cursor-pointer shadow-lg hover:bg-purple-400 transition-colors">
-            📸
-          </div>
-          <div className="w-12 h-12 bg-zinc-800 rounded-full overflow-hidden border-2 border-transparent hover:border-purple-400 cursor-pointer transition-colors shadow-lg flex items-center justify-center text-xl">
-            👤
-          </div>
-          <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center text-white cursor-pointer shadow-lg hover:bg-zinc-900 transition-colors">
-            <ArrowUpRight size={20} />
-          </div>
         </div>
       </motion.div>
     </section>
