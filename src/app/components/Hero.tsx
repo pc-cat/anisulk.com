@@ -42,7 +42,7 @@ export default function Hero() {
   const isDesktop = useMediaQuery({ minWidth: 1024 });
   const isTablet = useMediaQuery({ minWidth: 640, maxWidth: 1023 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
-  const modelScale = isDesktop ? 0.02 : isTablet ? 0.011 : 0.009;
+  const modelScale = isDesktop ? 0.022 : isTablet ? 0.011 : 0.009;
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);

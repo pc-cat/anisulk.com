@@ -11,10 +11,10 @@ export default function Home() {
     <main className="min-h-screen bg-black text-white relative flex flex-col selection:bg-purple-900 selection:text-white pb-32">
       <Navbar />
       <Hero />
-      <Marquee text="about . about . about ." />
+      <Marquee text="about" />
       <About />
       <Portfolio />
-      <Marquee text="projects . projects ." />
+      <Marquee text="projects" />
       <Projects />
       <Footer />
     </main>
