@@ -8,13 +8,31 @@ import { Menu, X } from 'lucide-react';
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   // Monitor scroll for additional effects if desired
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+
+      // Determine active section
+      const sections = ['about', 'portfolio', 'projects', 'contact'];
+      let current = '';
+      for (const id of sections) {
+        const element = document.getElementById(id);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Adjust intersection threshold to middle of screen
+          if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+            current = id;
+          }
+        }
+      }
+      setActiveSection(current);
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -24,21 +42,33 @@ export default function Navbar() {
       <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-[100] transition-all duration-300">
         <nav className={`w-full flex items-center justify-between px-6 py-4 rounded-full border border-white/10 shadow-2xl transition-all duration-300 ${scrolled ? 'bg-zinc-900/80 backdrop-blur-xl' : 'bg-zinc-900/60 backdrop-blur-md'}`}>
           {/* Logo functioning as Home Link */}
-          <Link href="/" className="font-bold text-2xl tracking-tighter mix-blend-difference z-50 transition-opacity hover:opacity-80">
+          <Link 
+            href="/" 
+            onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
+            className="font-bold text-2xl tracking-tighter mix-blend-difference z-[110] transition-opacity hover:opacity-80"
+          >
             anisul<span className="text-purple-500">.</span>
           </Link>
 
           {/* Desktop Links */}
           <div className="hidden md:flex gap-8 text-sm uppercase tracking-widest text-zinc-400">
-            <Link href="#about" className="hover:text-purple-400 transition-colors">About</Link>
-            <Link href="#portfolio" className="hover:text-purple-400 transition-colors">Portfolio</Link>
-            <Link href="#projects" className="hover:text-purple-400 transition-colors">Projects</Link>
+            {['about', 'portfolio', 'projects'].map((id) => (
+              <Link key={id} href={`#${id}`} className={`relative flex items-center hover:text-purple-400 transition-colors ${activeSection === id ? 'text-purple-300 font-bold' : ''}`}>
+                {id.charAt(0).toUpperCase() + id.slice(1)}
+                {activeSection === id && (
+                  <span className="absolute -right-3.5 w-[5px] h-[5px] rounded-full bg-purple-500 animate-pulse shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+                )}
+              </Link>
+            ))}
           </div>
 
           {/* Right Actions / Mobile Toggle */}
           <div className="flex items-center gap-4 z-50">
-            <a href="#contact" className="hidden sm:flex items-center gap-3 cursor-pointer group" aria-label="Contact me">
-              <span className="text-sm font-medium tracking-wide group-hover:text-purple-300 transition-colors">Contact me</span>
+            <a href="#contact" className="hidden sm:flex items-center gap-3 cursor-pointer group relative" aria-label="Contact me">
+              <span className={`text-sm font-medium tracking-wide group-hover:text-purple-300 transition-colors ${activeSection === 'contact' ? 'text-purple-300' : ''}`}>Contact me</span>
+              {activeSection === 'contact' && (
+                <span className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-[5px] h-[5px] rounded-full bg-purple-500 animate-pulse shadow-[0_0_8px_rgba(168,85,247,0.8)]" />
+              )}
               <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center group-hover:bg-purple-500 transition-colors text-white">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -72,18 +102,16 @@ export default function Navbar() {
             className="fixed inset-0 z-[90] bg-purple-900 flex flex-col items-center justify-center text-white"
           >
             <div className="flex flex-col gap-8 text-center uppercase tracking-widest text-2xl font-black relative z-10">
-              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
-                <Link href="#about" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-purple-300 transition-colors">About</Link>
-              </motion.div>
-              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
-                <Link href="#portfolio" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-purple-300 transition-colors">Portfolio</Link>
-              </motion.div>
-              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
-                <Link href="#projects" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-purple-300 transition-colors">Projects</Link>
-              </motion.div>
-              <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}>
-                <Link href="#contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-purple-300 transition-colors">Contact</Link>
-              </motion.div>
+              {['about', 'portfolio', 'projects', 'contact'].map((id, index) => (
+                <motion.div key={id} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 + index * 0.1 }}>
+                  <Link href={`#${id}`} onClick={() => setIsMobileMenuOpen(false)} className={`relative inline-flex items-center hover:text-purple-300 transition-colors ${activeSection === id ? 'text-purple-200' : ''}`}>
+                    {id.charAt(0).toUpperCase() + id.slice(1)}
+                    {activeSection === id && (
+                      <span className="absolute -right-6 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white animate-pulse shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
+                    )}
+                  </Link>
+                </motion.div>
+              ))}
             </div>
 
             {/* Background design element on mobile */}
