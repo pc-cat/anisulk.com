@@ -233,6 +233,17 @@ export default function Hero() {
           </motion.div>
         </div>
       </motion.div>
+
+      {/* Scroll Down Arrow */}
+      <a
+        href="#about"
+        aria-label="Scroll to About section"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-zinc-500 hover:text-purple-400 transition-colors animate-bounce"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 5v14M19 12l-7 7-7-7" />
+        </svg>
+      </a>
     </section>
   );
 }
