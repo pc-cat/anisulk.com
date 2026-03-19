@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
-import { useFrame, ThreeElements } from '@react-three/fiber';
+import React, { useRef, useEffect } from 'react';
+import { useGLTF, useAnimations } from '@react-three/drei';
+import { useFrame, useGraph, ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
-import { GLTF } from 'three-stdlib';
+import { GLTF, SkeletonUtils } from 'three-stdlib';
 
 const START_Y = 8;    // model enters from above the camera
 const REST_Y = -1.9; // resting / landing position
@@ -15,25 +15,46 @@ type GroupProps = ThreeElements['group'];
 interface BatmanModelProps extends GroupProps {
     /** Normalized mouse X, range -1 (left) → +1 (right). Pass as a ref to avoid re-renders. */
     mouseX: React.MutableRefObject<number>;
-    /** Uniform scale multiplier (applied on top of the model's native 100× factor). */
+    /** Uniform scale multiplier. */
     scale?: number;
+}
+
+type ActionName = 'IDLE001' | 'IDLE001_1' | 'IDLE002' | 'IDLE003';
+
+interface GLTFAction extends THREE.AnimationClip {
+    name: ActionName;
 }
 
 type GLTFResult = GLTF & {
     nodes: {
-        [key: string]: THREE.Mesh;
+        Object_7: THREE.SkinnedMesh;
+        _rootJoint: THREE.Bone;
     };
     materials: {
-        [key: string]: THREE.Material;
+        H_BatMan_D: THREE.MeshStandardMaterial;
     };
+    animations: GLTFAction[];
 };
 
 export function BatmanModel({ scale = 1, mouseX, ...props }: BatmanModelProps) {
     const groupRef = useRef<THREE.Group>(null);
-    const { nodes, materials } = useGLTF('/models/batman_ben_affleck.glb') as unknown as GLTFResult;
+    const { scene, animations } = useGLTF('/models/batman_ben_affleck.glb?v=3');
+    const clone = React.useMemo(() => SkeletonUtils.clone(scene), [scene]);
+    const { nodes, materials } = useGraph(clone) as unknown as GLTFResult;
+    const { actions } = useAnimations(animations, groupRef);
 
     const elapsedRef = useRef(0);
     const landedRef = useRef(false);
+
+    useEffect(() => {
+        // Play an idle animation if available
+        if (actions && actions['IDLE001']) {
+            actions['IDLE001'].play();
+        } else if (actions && Object.keys(actions).length > 0) {
+            const firstAction = Object.keys(actions)[0];
+            actions[firstAction]?.play();
+        }
+    }, [actions]);
 
     useFrame((_, delta) => {
         if (!groupRef.current) return;
@@ -66,16 +87,31 @@ export function BatmanModel({ scale = 1, mouseX, ...props }: BatmanModelProps) {
     return (
         <group ref={groupRef} {...props} dispose={null}>
             <group scale={scale * 100}>
-                <mesh castShadow receiveShadow geometry={nodes.Generic_Gold001_0.geometry} material={materials['Gold.001']} />
-                <mesh castShadow receiveShadow geometry={nodes.Generic_BatSkin_0.geometry} material={materials.BatSkin} />
-                <mesh castShadow receiveShadow geometry={nodes.Generic_BatBlack_0.geometry} material={materials.BatBlack} />
-                <mesh castShadow receiveShadow geometry={nodes.Generic_BatMetal_0.geometry} material={materials.BatMetal} />
-                <mesh castShadow receiveShadow geometry={nodes.Generic_BatStraps_0.geometry} material={materials.BatStraps} />
-                <mesh castShadow receiveShadow geometry={nodes.Generic_BatGray_0.geometry} material={materials.BatGray} />
-                <mesh castShadow receiveShadow geometry={nodes.Generic_BatCape_0.geometry} material={materials.BatCape} />
+                <group name="Sketchfab_Scene">
+                    <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]} scale={90.402}>
+                        <group name="Batmanfbx" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+                            <group name="Object_2">
+                                <group name="RootNode">
+                                    <group name="Object_4">
+                                        <primitive object={nodes._rootJoint} />
+                                        <group name="Object_6" rotation={[-Math.PI / 2, 0, 0]} />
+                                        <skinnedMesh 
+                                            castShadow 
+                                            receiveShadow 
+                                            name="Object_7" 
+                                            geometry={nodes.Object_7.geometry} 
+                                            material={materials.H_BatMan_D} 
+                                            skeleton={nodes.Object_7.skeleton} 
+                                        />
+                                    </group>
+                                </group>
+                            </group>
+                        </group>
+                    </group>
+                </group>
             </group>
         </group>
     );
 }
 
-useGLTF.preload('/models/batman_ben_affleck.glb');
+useGLTF.preload('/models/batman_ben_affleck.glb?v=3');
