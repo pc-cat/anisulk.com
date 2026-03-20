@@ -195,7 +195,7 @@ function MosqueSilhouettes() {
 function CopyToast({ message, show }: { message: string; show: boolean }) {
   return (
     <div
-      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 px-8 py-4 rounded-full bg-purple-900/40 backdrop-blur-xl border border-purple-500/30 text-white text-base font-semibold shadow-2xl shadow-purple-900/50 transition-all duration-500 will-change-transform ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"
+      className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 px-8 py-4 rounded-full bg-purple-900/40 backdrop-blur-xl border border-purple-500/30 text-white text-base font-semibold shadow-2xl shadow-purple-900/50 transition-all duration-500 will-change-transform ${show ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8 pointer-events-none"
         }`}
       style={{ WebkitBackdropFilter: "blur(24px)" }}
     >
