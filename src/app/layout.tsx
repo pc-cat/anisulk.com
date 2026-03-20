@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Anisul | Visual Poetry", // Better SEO and brand alignment
+  title: "Anisul",
   description: "A visual journey that transcends time and space. Discover the artistry of moments captured in motion by Anisul.",
 };
 

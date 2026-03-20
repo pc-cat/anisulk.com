@@ -19,7 +19,7 @@ interface PaymentMethod {
 }
 
 const mobileBanking: PaymentMethod[] = [
-  { name: "bKash", number: "01332123503", icon: "b", color: "bg-pink-600" },
+  { name: "bKash", number: "01827887541", icon: "b", color: "bg-pink-600" },
   { name: "Nagad", number: "01332123503", icon: "N", color: "bg-orange-500" },
 ];
 
@@ -251,7 +251,7 @@ export default function SalamiPage() {
             Share the joy of Salami with{" "}
           </span>
           <span className="text-white font-bold text-sm">
-            Kazi Anisul Moyeen
+            Kazi Moyeen Anisul
           </span>
         </div>
       </div>
