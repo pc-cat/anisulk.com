@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 
 interface BankAccount {
   name: string;
@@ -195,13 +195,12 @@ function MosqueSilhouettes() {
 function CopyToast({ message, show }: { message: string; show: boolean }) {
   return (
     <div
-      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 px-8 py-4 rounded-full bg-purple-900/40 backdrop-blur-xl border border-purple-500/30 text-white text-base font-semibold shadow-2xl shadow-purple-900/50 transition-all duration-500 will-change-transform ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"
         }`}
+      style={{ WebkitBackdropFilter: "blur(24px)" }}
     >
-      <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-green-600 text-white text-sm font-medium shadow-lg shadow-green-900/40">
-        <span>✅</span>
-        <span>{message}</span>
-      </div>
+      <span>✨</span>
+      <span>{message}</span>
     </div>
   );
 }
@@ -295,10 +294,12 @@ function BankCard({
 
 export default function SalamiPage() {
   const [toast, setToast] = useState({ show: false, message: "" });
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showToast = (message: string) => {
     setToast({ show: true, message });
-    setTimeout(() => setToast({ show: false, message: "" }), 2500);
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    toastTimeoutRef.current = setTimeout(() => setToast((prev) => ({ ...prev, show: false })), 4000);
   };
 
   return (
