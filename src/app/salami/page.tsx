@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 interface BankAccount {
   name: string;
@@ -52,12 +52,151 @@ const international: PaymentMethod[] = [
   { name: "Wise", number: "@kazimoyeena", icon: "W", color: "bg-green-500" },
 ];
 
+function StarsBackground({ count = 40 }: { count?: number }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const stars = useMemo(() => {
+    return Array.from({ length: count }).map((_, i) => ({
+      id: i,
+      top: `${Math.random() * 45}%`,
+      left: `${Math.random() * 100}%`,
+      delay: `${Math.random() * 3}s`,
+      dur: `${2 + Math.random() * 3}s`,
+      scale: 0.5 + Math.random(),
+    }));
+  }, [count]);
+
+  if (!mounted) return null;
+
+  return (
+    <>
+      <style>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.1; }
+          50% { opacity: 1; }
+        }
+        .star {
+          position: absolute;
+          background: white;
+          border-radius: 50%;
+          pointer-events: none;
+        }
+      `}</style>
+      {stars.map((s) => (
+        <div
+          key={s.id}
+          className="star"
+          style={{
+            top: s.top,
+            left: s.left,
+            width: `${2 * s.scale}px`,
+            height: `${2 * s.scale}px`,
+            animation: `twinkle ${s.dur} ${s.delay} infinite ease-in-out`
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
+function MosqueSilhouettes() {
+  return (
+    <div className="absolute bottom-0 left-0 right-0 pointer-events-none z-0">
+      <svg viewBox="0 -20 1400 320" className="w-full h-auto drop-shadow-2xl" preserveAspectRatio="xMidYMax meet">
+        <defs>
+          <linearGradient id="mosque-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#3b0764" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#000000" stopOpacity="1" />
+          </linearGradient>
+          <linearGradient id="mosque-back" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#2e1065" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#000000" stopOpacity="0.8" />
+          </linearGradient>
+        </defs>
+
+        {/* Background Layer (fainter silhouette for depth/parallax) */}
+        <g fill="url(#mosque-back)">
+          {/* Large backdrop dome */}
+          <path d="M 400 300 C 350 150 500 80 700 30 C 900 80 1050 150 1000 300 Z" />
+          {/* Backdrop minarets */}
+          <rect x="300" y="80" width="10" height="220" />
+          <polygon points="295,80 315,80 305,30" />
+          <rect x="1090" y="80" width="10" height="220" />
+          <polygon points="1085,80 1105,80 1095,30" />
+        </g>
+
+        {/* Foreground Layer (main intricate structures) */}
+        <g fill="url(#mosque-grad)">
+          {/* Main Domes */}
+          <path d="M 620 280 C 580 170 660 100 700 60 C 740 100 820 170 780 280 Z" />
+          <path d="M 520 280 C 490 220 550 160 580 120 C 610 160 670 220 640 280 Z" />
+          <path d="M 760 280 C 730 220 790 160 820 120 C 850 160 910 220 880 280 Z" />
+
+          {/* Central Dome Spire */}
+          <rect x="698" y="30" width="4" height="30" />
+          <circle cx="700" cy="25" r="5" />
+          <path d="M700,18 A 6,6 0 1,1 700,6 A 8,8 0 1,0 700,18 Z" />
+
+          {/* Side Dome Spires */}
+          <rect x="578" y="100" width="4" height="20" />
+          <circle cx="580" cy="98" r="3" />
+          <path d="M580,92 A 4,4 0 1,1 580,84 A 5,5 0 1,0 580,92 Z" />
+          <rect x="818" y="100" width="4" height="20" />
+          <circle cx="820" cy="98" r="3" />
+          <path d="M820,92 A 4,4 0 1,1 820,84 A 5,5 0 1,0 820,92 Z" />
+
+          {/* Left Minaret */}
+          <rect x="440" y="60" width="20" height="220" />
+          <path d="M435 180 L465 180 L465 190 L440 190 Z" />
+          <path d="M435 110 L465 110 L465 120 L440 120 Z" />
+          <polygon points="435,60 465,60 450,10" />
+          <rect x="449" y="0" width="2" height="10" />
+          <path d="M450,-2 A 3,3 0 1,1 450,-8 A 4,4 0 1,0 450,-2 Z" />
+
+          {/* Right Minaret */}
+          <rect x="940" y="60" width="20" height="220" />
+          <path d="M935 180 L965 180 L965 190 L940 190 Z" />
+          <path d="M935 110 L965 110 L965 120 L940 120 Z" />
+          <polygon points="935,60 965,60 950,10" />
+          <rect x="949" y="0" width="2" height="10" />
+          <path d="M950,-2 A 3,3 0 1,1 950,-8 A 4,4 0 1,0 950,-2 Z" />
+
+          {/* Left Outer Building */}
+          <path d="M 180 280 C 160 220 220 180 250 140 C 280 180 340 220 320 280 Z" />
+          <rect x="142" y="100" width="16" height="180" />
+          <polygon points="138,100 162,100 150,50" />
+          <rect x="149" y="40" width="2" height="10" />
+          <path d="M150,38 A 3,3 0 1,1 150,32 A 4,4 0 1,0 150,38 Z" />
+          <path d="M138 160 L162 160 L162 165 L142 165 Z" />
+
+          {/* Right Outer Building */}
+          <path d="M 1080 280 C 1060 220 1120 180 1150 140 C 1180 180 1240 220 1220 280 Z" />
+          <rect x="1242" y="100" width="16" height="180" />
+          <polygon points="1238,100 1262,100 1250,50" />
+          <rect x="1249" y="40" width="2" height="10" />
+          <path d="M1250,38 A 3,3 0 1,1 1250,32 A 4,4 0 1,0 1250,38 Z" />
+          <path d="M1238 160 L1262 160 L1262 165 L1242 165 Z" />
+
+          {/* Ground Base */}
+          <rect x="0" y="260" width="1400" height="40" />
+          <rect x="440" y="240" width="520" height="20" />
+        </g>
+
+
+      </svg>
+    </div>
+  );
+}
+
 function CopyToast({ message, show }: { message: string; show: boolean }) {
   return (
     <div
-      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-        show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
-      }`}
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+        }`}
     >
       <div className="flex items-center gap-2 px-6 py-3 rounded-full bg-green-600 text-white text-sm font-medium shadow-lg shadow-green-900/40">
         <span>✅</span>
@@ -82,7 +221,7 @@ function CopyCard({
   return (
     <div
       onClick={handleCopy}
-      className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/40 transition-all duration-300 cursor-pointer group"
+      className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/40 hover:bg-zinc-800/90 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-900/20 active:scale-[0.98] transition-all duration-300 cursor-pointer group"
     >
       <div
         className={`w-10 h-10 ${method.color} rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0`}
@@ -113,7 +252,10 @@ function BankCard({
   };
 
   return (
-    <div className="rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/40 transition-all duration-300 p-5 relative group">
+    <div
+      onClick={handleCopy}
+      className="rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-purple-500/40 hover:bg-zinc-800/90 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-900/20 active:scale-[0.98] transition-all duration-300 p-5 relative cursor-pointer group"
+    >
       {/* Header row */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
@@ -172,68 +314,8 @@ export default function SalamiPage() {
       <div className="absolute top-[30%] right-0 w-[300px] h-[300px] bg-fuchsia-600/10 rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-[20%] left-0 w-[250px] h-[250px] bg-purple-700/10 rounded-full blur-[80px] pointer-events-none" />
 
-      {/* Twinkling Stars */}
-      <style>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.2; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.3); }
-        }
-        .star {
-          position: absolute;
-          width: 3px;
-          height: 3px;
-          background: white;
-          border-radius: 50%;
-          pointer-events: none;
-        }
-      `}</style>
-      {[
-        { top: "5%", left: "10%", delay: "0s", dur: "3s" },
-        { top: "8%", left: "25%", delay: "1.2s", dur: "2.5s" },
-        { top: "3%", left: "45%", delay: "0.5s", dur: "4s" },
-        { top: "12%", left: "65%", delay: "2s", dur: "3.5s" },
-        { top: "6%", left: "80%", delay: "0.8s", dur: "2.8s" },
-        { top: "15%", left: "90%", delay: "1.5s", dur: "3.2s" },
-        { top: "18%", left: "15%", delay: "0.3s", dur: "4.2s" },
-        { top: "22%", left: "55%", delay: "2.5s", dur: "3s" },
-        { top: "10%", left: "35%", delay: "1.8s", dur: "2.2s" },
-        { top: "25%", left: "75%", delay: "0.7s", dur: "3.8s" },
-        { top: "2%", left: "58%", delay: "3s", dur: "2.6s" },
-        { top: "20%", left: "5%", delay: "1s", dur: "3.4s" },
-      ].map((s, i) => (
-        <div
-          key={i}
-          className="star"
-          style={{
-            top: s.top,
-            left: s.left,
-            animation: `twinkle ${s.dur} ${s.delay} infinite ease-in-out`,
-          }}
-        />
-      ))}
-
-      {/* Mosque Silhouettes */}
-      <div className="absolute bottom-0 left-0 right-0 pointer-events-none opacity-[0.06]">
-        <svg viewBox="0 0 1200 200" className="w-full" fill="white">
-          <rect x="50" y="120" width="8" height="80" />
-          <rect x="80" y="100" width="40" height="100" />
-          <ellipse cx="100" cy="100" rx="20" ry="25" />
-          <rect x="95" y="75" width="2" height="15" />
-          <circle cx="96" cy="72" r="4" />
-          <rect x="40" y="80" width="12" height="120" />
-          <polygon points="34,80 52,80 46,55" />
-          <rect x="44" y="48" width="2" height="10" />
-          <circle cx="45" cy="46" r="3" />
-          <rect x="1080" y="110" width="50" height="90" />
-          <ellipse cx="1105" cy="110" rx="25" ry="30" />
-          <rect x="1100" y="80" width="2" height="15" />
-          <circle cx="1101" cy="77" r="4" />
-          <rect x="1140" y="85" width="10" height="115" />
-          <polygon points="1135,85 1155,85 1150,60" />
-          <rect x="1144" y="52" width="2" height="10" />
-          <circle cx="1145" cy="50" r="3" />
-        </svg>
-      </div>
+      <StarsBackground count={50} />
+      <MosqueSilhouettes />
 
       {/* Greeting Header */}
       <div className="text-center mb-12 mt-8 relative z-10">
@@ -307,9 +389,7 @@ export default function SalamiPage() {
         </section>
 
         {/* Footer */}
-        <p className="text-center text-zinc-600 text-xs pt-6">
-          Made with 💜 to share the joy of Eid.
-        </p>
+
       </div>
 
       {/* Copy Toast */}

@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Anisul",
-  description: "A visual journey that transcends time and space. Discover the artistry of moments captured in motion by Anisul.",
+  description: "Click to see my portfolio",
 };
 
 export default function RootLayout({
